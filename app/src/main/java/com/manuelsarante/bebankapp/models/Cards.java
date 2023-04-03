@@ -3,9 +3,10 @@ package com.manuelsarante.bebankapp.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Cards {
+public class Cards implements Serializable {
 
     @SerializedName("idCard")
     @Expose
