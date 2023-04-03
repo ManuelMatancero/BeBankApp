@@ -9,4 +9,11 @@
     <string name="fPass">FORGOT PASSWORD?</string>
     <string name="savings">Savings Account / </string>
     <string name="money">Money:</string>
+    <string name="details">Details</string>
+    <string name="trans">Transactions</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cvv">cvv</string>
+    <string name="vUntil">Valid\nuntil</string>
+
 </resources>
