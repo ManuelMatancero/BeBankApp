@@ -22,7 +22,7 @@ public class BankingAccount implements Serializable {
 
     @SerializedName("cards")
     @Expose
-    private List<Cards> cards;
+    private Cards cards;
 
     public Long getIdAccount() {
         return idAccount;
@@ -48,11 +48,11 @@ public class BankingAccount implements Serializable {
         this.mountAccount = mountAccount;
     }
 
-    public List<Cards> getCards() {
+    public Cards getCards() {
         return cards;
     }
 
-    public void setCards(List<Cards> cards) {
+    public void setCards(Cards cards) {
         this.cards = cards;
     }
 }

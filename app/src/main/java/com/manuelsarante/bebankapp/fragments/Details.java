@@ -14,6 +14,11 @@ import com.manuelsarante.bebankapp.R;
 import com.manuelsarante.bebankapp.models.BankingAccount;
 import com.manuelsarante.bebankapp.models.User;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Details#newInstance} factory method to
@@ -84,7 +89,22 @@ public class Details extends Fragment {
             User myString = (User) data.getSerializable("myData");
             BankingAccount ba = (BankingAccount) data.getSerializable("myAc");
             name.setText(myString.getName());
-            cvv.setText(String.valueOf(ba.getCards().get(0).getCvv()));
+            cvv.setText(String.valueOf(ba.getCards().getCvv()));
+            //Setting the pattern #### #### to the card number
+            long number = Long.parseLong(ba.getCards().getCardNumber());
+            String formatted = String.format("%s %s %s %s",
+                    Long.toString(number).substring(0, 4),
+                    Long.toString(number).substring(4, 8),
+                    Long.toString(number).substring(8, 12),
+                    Long.toString(number).substring(12, 16));
+            cardNumber.setText(formatted);
+            //Parsing Card Date to LocalDate
+            String date = ba.getCards().getExpireDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate lDate = LocalDate.parse(date, formatter);
+            //Setting the month and the year
+            validDate.setText(lDate.getMonth().ordinal()+"/"+lDate.getYear());
+
         } else{
             Toast.makeText(getContext(), "Null Bundle", Toast.LENGTH_SHORT).show();
         }
