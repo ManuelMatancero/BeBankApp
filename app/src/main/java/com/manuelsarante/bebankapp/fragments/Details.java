@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.manuelsarante.bebankapp.R;
+import com.manuelsarante.bebankapp.models.BankingAccount;
+import com.manuelsarante.bebankapp.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,10 +24,13 @@ public class Details extends Fragment {
     TextView cvv, cardNumber, name, validDate;
     View view;
 
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    User user;
+    public static Bundle data;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -58,7 +64,9 @@ public class Details extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            data = getArguments();
         }
+
     }
 
     @Override
@@ -72,7 +80,15 @@ public class Details extends Fragment {
         validDate = view.findViewById(R.id.validDate);
 
 
-        name.setText("Manuel Antonio Sarante");
+        if (data != null) {
+            User myString = (User) data.getSerializable("myData");
+            BankingAccount ba = (BankingAccount) data.getSerializable("myAc");
+            name.setText(myString.getName());
+            cvv.setText(String.valueOf(ba.getCards().get(0).getCvv()));
+        } else{
+            Toast.makeText(getContext(), "Null Bundle", Toast.LENGTH_SHORT).show();
+        }
+
         return view;
     }
 }

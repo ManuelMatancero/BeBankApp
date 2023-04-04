@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,8 +55,8 @@ public class MainActivity extends AppCompatActivity{
         list= findViewById(R.id.listview);
 
         user = (User) getIntent().getSerializableExtra("user");
-        userName = user.getName();
 
+        //Show welcome message on top of the activity
         welcome.setText("Welcome, " + user.getName());
 
         //Show accounts in list view
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BankingAccount account = accounts.get(position);
                 Intent i = new Intent(MainActivity.this, AccountDetails.class);
+                i.putExtra("user", user);
                 i.putExtra("account", account);
                 startActivity(i);
             }

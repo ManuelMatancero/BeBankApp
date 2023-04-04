@@ -3,6 +3,7 @@ package com.manuelsarante.bebankapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.manuelsarante.bebankapp.fragments.Details;
@@ -24,8 +26,8 @@ import java.util.Locale;
 
 public class AccountDetails extends AppCompatActivity {
 
-    BankingAccount account;
-    User user;
+    public static  BankingAccount account;
+    public static User user;
     TextView ammount;
     ImageButton goBack, logout;
     BottomNavigationView bottomNav;
@@ -41,7 +43,21 @@ public class AccountDetails extends AppCompatActivity {
         logout = findViewById(R.id.logOut);
         //Get the account sent in the intent
         account = (BankingAccount) getIntent().getSerializableExtra("account");
+        if(account!= null){
+            Toast.makeText(getApplicationContext(), "Account is not null", Toast.LENGTH_SHORT).show();
+        }
         user = (User) getIntent().getSerializableExtra("user");
+
+
+        //Sending username from this Activity to Details Fragment
+        Details detail = new Details();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        Bundle data = new Bundle();
+        data.putSerializable("myData", user);
+        data.putSerializable("myAc", account);
+        detail.setArguments(data);
+        fragmentTransaction.replace(R.id.fragment_container, detail).commit();
+        /////////////////////////////////////////////////////////////////////////////
 
         NumberFormat nFormat = DecimalFormat.getCurrencyInstance(Locale.getDefault());
         ammount.setText(String.valueOf(nFormat.format(account.getMountAccount())));
@@ -76,10 +92,10 @@ public class AccountDetails extends AppCompatActivity {
 
                     switch (item.getItemId()) {
 
-                        case R.id.Home:
+                        case R.id.detail:
                             selectedFragment = new Details();
                             break;
-                        case R.id.Clients:
+                        case R.id.trans:
                             selectedFragment = new Transactions();
                             break;
 
