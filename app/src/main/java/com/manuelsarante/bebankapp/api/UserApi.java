@@ -1,6 +1,7 @@
 package com.manuelsarante.bebankapp.api;
 
 import com.manuelsarante.bebankapp.dto.LoginDto;
+import com.manuelsarante.bebankapp.dto.LoginWithPinDto;
 import com.manuelsarante.bebankapp.models.User;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public interface UserApi {
 
     @POST("user/login")
     Call<User> login(@Body LoginDto loginDto);
+
+    @POST("user/pinlogin")
+    Call<User> loginPin(@Body LoginWithPinDto loginWithPinDto);
 
     @GET("user/{id}")
     Call<User> getCliente(@Path("id") int userId);

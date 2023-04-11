@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,7 +27,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class Details extends Fragment {
 
-    TextView cvv, cardNumber, name, validDate;
+    TextView cvv, cardNumber, name, validDate,money, accountNumber;
     View view;
 
 
@@ -79,6 +80,8 @@ public class Details extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_details, container, false);
         // Inflate the layout for this fragment
+        money = view.findViewById(R.id.money);
+        accountNumber = view.findViewById(R.id.accountNumber);
         cvv = view.findViewById(R.id.cvv);
         cardNumber = view.findViewById(R.id.cardNumber);
         name = view.findViewById(R.id.name);
@@ -104,6 +107,10 @@ public class Details extends Fragment {
             LocalDate lDate = LocalDate.parse(date, formatter);
             //Setting the month and the year
             validDate.setText(lDate.getMonth().ordinal()+"/"+lDate.getYear());
+            accountNumber.setText(String.valueOf(ba.getAccountNumber()));
+            //Format currency
+            NumberFormat nFormat = DecimalFormat.getCurrencyInstance(Locale.getDefault());
+            money.setText(String.valueOf(nFormat.format(ba.getMountAccount())));
 
         } else{
             Toast.makeText(getContext(), "Null Bundle", Toast.LENGTH_SHORT).show();

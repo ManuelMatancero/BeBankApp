@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity{
     User user;
     BankingAccountsAdapter accountsAdapter;
     ListView list;
-    TextView welcome;
+    TextView welcome, empty;
     String userName="hola";
     ImageButton logout, userDetails;
     List<BankingAccount> accounts= new ArrayList<>();
@@ -53,8 +53,11 @@ public class MainActivity extends AppCompatActivity{
         userDetails = findViewById(R.id.userDetail);
         welcome = findViewById(R.id.welcome);
         list= findViewById(R.id.listview);
-
+        TextView emptyText1 = (TextView)findViewById(R.id.empty1);
+        list.setEmptyView(emptyText1);
+        //Here i get the user info from last activity
         user = (User) getIntent().getSerializableExtra("user");
+
 
         //Show welcome message on top of the activity
         welcome.setText("Welcome, " + user.getName());
