@@ -36,6 +36,10 @@ public class User implements Serializable {
     @Expose
     private int status;
 
+    @SerializedName("pin")
+    @Expose
+    private String pin;
+
     @SerializedName("bankingAccounts")
     @Expose
     private List<BankingAccount> bankingAccounts;
@@ -94,6 +98,14 @@ public class User implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
     }
 
     public List<BankingAccount> getBankingAccounts() {

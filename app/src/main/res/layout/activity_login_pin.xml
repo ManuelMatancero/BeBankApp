@@ -29,7 +29,7 @@
             android:textSize="25sp" />
 
         <Button
-            android:id="@+id/logOut"
+            android:id="@+id/unlink"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/unlink"
@@ -42,8 +42,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="130dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
@@ -69,7 +69,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bginputtask"
                     android:imeOptions="actionDone"
-                    android:inputType="phone"
+                    android:inputType="numberPassword"
                     android:maxLength="1"
                     android:maxLines="1"
                     android:textAlignment="center" />
@@ -82,7 +82,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bginputtask"
                     android:imeOptions="actionDone"
-                    android:inputType="phone"
+                    android:inputType="numberPassword"
                     android:maxLength="1"
                     android:maxLines="1"
                     android:textAlignment="center" />
@@ -95,7 +95,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bginputtask"
                     android:imeOptions="actionDone"
-                    android:inputType="phone"
+                    android:inputType="numberPassword"
                     android:maxLength="1"
                     android:maxLines="1"
                     android:textAlignment="center" />
@@ -107,7 +107,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bginputtask"
                     android:imeOptions="actionDone"
-                    android:inputType="phone"
+                    android:inputType="numberPassword"
                     android:maxLength="1"
                     android:maxLines="1"
                     android:textAlignment="center" />
@@ -120,11 +120,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:indeterminate="true"
+                android:visibility="invisible"
                 android:indeterminateDrawable="@drawable/progresbar_bg_black" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/log"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_black"
                 app:srcCompat="@drawable/ic_baseline_navigate_next_24"

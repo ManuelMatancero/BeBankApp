@@ -17,6 +17,9 @@ import com.manuelsarante.bebankapp.api.UserApi;
 import com.manuelsarante.bebankapp.dto.LoginDto;
 import com.manuelsarante.bebankapp.models.BankingAccount;
 import com.manuelsarante.bebankapp.models.User;
+import com.manuelsarante.bebankapp.room.dao.UserCredentialsDao;
+import com.manuelsarante.bebankapp.room.database.AppDatabase;
+import com.manuelsarante.bebankapp.room.models.UserCredentials;
 import com.manuelsarante.bebankapp.utils.Apis;
 
 import java.io.Serializable;
@@ -34,6 +37,11 @@ public class Login extends AppCompatActivity{
     UserApi userApi;
     ProgressBar progressBar;
 
+    //Database Variables
+    AppDatabase db;
+    UserCredentialsDao userCredentialsDao;
+    UserCredentials userCredentials = new UserCredentials();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +52,14 @@ public class Login extends AppCompatActivity{
         pass = findViewById(R.id.password);
         btnLogin = findViewById(R.id.button);
         progressBar = findViewById(R.id.progresbar);
+
+        //Conection and creation of the database
+        db = AppDatabase.getInstance(Login.this);
+        userCredentialsDao = db.userCredentialsDao();
+
+        //Check If user did log in
+        checkIfUserLoged();
+
 
         LoginDto log = new LoginDto();
 
@@ -67,10 +83,18 @@ public class Login extends AppCompatActivity{
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
                    User user = response.body();
+                   //Passing data to the UserCredentials to save it in the database
+                   userCredentials.setUser(user.getUser());
+                   userCredentials.setPassword(user.getPassword());
+                   userCredentials.setPin(user.getPin());
+                   //Save the entrie once
+                    userCredentialsDao.insertUserCredential(userCredentials);
+
                     progressBar.setVisibility(View.INVISIBLE);
                     Intent i = new Intent(Login.this, MainActivity.class);
                     i.putExtra("user", user);
                     startActivity(i);
+                    finish();
                 }else if(response.code()==404){
                     Toast.makeText(getApplicationContext(),"Incorrect Password or User not found", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
@@ -85,5 +109,22 @@ public class Login extends AppCompatActivity{
 
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkIfUserLoged();
+    }
+
+    public void checkIfUserLoged(){
+        //here if the table in the database is not empty it will open the pinActivity
+        List<UserCredentials> userCredentials = userCredentialsDao.getAll();
+        if(userCredentials.isEmpty()){
+
+        }else{
+            Intent i = new Intent(Login.this, LoginPin.class);
+            startActivity(i);
+        }
     }
 }

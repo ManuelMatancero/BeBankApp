@@ -41,15 +41,12 @@ public class AccountDetails extends AppCompatActivity {
         ammount = findViewById(R.id.ammount);
         goBack = findViewById(R.id.goBack);
         logout = findViewById(R.id.logOut);
-        //Get the account sent in the intent
+
+        //Get the account and user sent in the intent
         account = (BankingAccount) getIntent().getSerializableExtra("account");
-        if(account!= null){
-            Toast.makeText(getApplicationContext(), "Account is not null", Toast.LENGTH_SHORT).show();
-        }
         user = (User) getIntent().getSerializableExtra("user");
 
-
-        //Sending username from this Activity to Details Fragment
+        //Sending user and account from this Activity to Details Fragment
         Details detail = new Details();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Bundle data = new Bundle();
@@ -59,6 +56,7 @@ public class AccountDetails extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragment_container, detail).commit();
         /////////////////////////////////////////////////////////////////////////////
 
+        //Number format to give currency format to the amount
         NumberFormat nFormat = DecimalFormat.getCurrencyInstance(Locale.getDefault());
         ammount.setText(String.valueOf(nFormat.format(account.getMountAccount())));
 
@@ -98,8 +96,6 @@ public class AccountDetails extends AppCompatActivity {
                         case R.id.trans:
                             selectedFragment = new Transactions();
                             break;
-
-
                     }
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
