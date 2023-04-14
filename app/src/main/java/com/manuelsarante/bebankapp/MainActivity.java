@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity{
         userDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(MainActivity.this, UserDetails.class);
+                i.putExtra("user", user);
+                startActivity(i);
             }
         });
 

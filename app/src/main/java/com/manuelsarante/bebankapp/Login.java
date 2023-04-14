@@ -66,10 +66,19 @@ public class Login extends AppCompatActivity{
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                log.setUser(user.getText().toString());
-                log.setPassword(pass.getText().toString());
-                login(log);
+                if(user.getText().toString().isEmpty()){
+                    user.setError("Cannot be empty");
+                    if(pass.getText().toString().isEmpty()){
+                        pass.setError("Cannot be empty");
+                    }
+                }else if(pass.getText().toString().isEmpty()){
+                    pass.setError("Cannot be empty");
+                }else{
+                    progressBar.setVisibility(View.VISIBLE);
+                    log.setUser(user.getText().toString());
+                    log.setPassword(pass.getText().toString());
+                    login(log);
+                }
             }
         });
 
@@ -85,7 +94,8 @@ public class Login extends AppCompatActivity{
                    User user = response.body();
                    //Passing data to the UserCredentials to save it in the database
                    userCredentials.setUser(user.getUser());
-                   userCredentials.setPassword(user.getPassword());
+                   //Here i pass the password from the edit text to avoid pass the hash coded password from database
+                   userCredentials.setPassword(pass.getText().toString());
                    userCredentials.setPin(user.getPin());
                    //Save the entrie once
                     userCredentialsDao.insertUserCredential(userCredentials);

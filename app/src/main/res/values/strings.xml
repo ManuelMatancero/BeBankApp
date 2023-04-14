@@ -21,5 +21,10 @@
     <string name="empty">This user does not has accounts</string>
     <string name="pin">Secret PIN</string>
     <string name="unlink">Unlink</string>
+    <string name="profile">My Profile</string>
+    <string name="fName">Full Name</string>
+    <string name="email">Email Address</string>
+    <string name="ntmChange">Need to make a change?</string>
+    <string name="pMessage">For your protection, some of this information can not be changed without contacting us.</string>
 
 </resources>

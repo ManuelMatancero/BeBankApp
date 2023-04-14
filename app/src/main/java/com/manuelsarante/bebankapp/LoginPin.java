@@ -2,15 +2,13 @@ package com.manuelsarante.bebankapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.manuelsarante.bebankapp.api.UserApi;
-import com.manuelsarante.bebankapp.dto.LoginDto;
 import com.manuelsarante.bebankapp.dto.LoginWithPinDto;
 import com.manuelsarante.bebankapp.models.User;
 import com.manuelsarante.bebankapp.room.dao.UserCredentialsDao;
@@ -60,11 +57,9 @@ public class LoginPin extends AppCompatActivity {
 
         digit1.requestFocus();
 
-
         //Database instance
         db = AppDatabase.getInstance(LoginPin.this);
         userCredentialsDao = db.userCredentialsDao();
-
 
         //This code is to go to next textview when text is changed
         digit1.addTextChangedListener(new TextWatcher() {
@@ -135,7 +130,7 @@ public class LoginPin extends AppCompatActivity {
 
 
 
-        //This make the acction to do login
+        //This make the action to do login
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,12 +157,9 @@ public class LoginPin extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 
     public void login(LoginWithPinDto loginDto){
-
         userApi = Apis.getUser();
         Call<User> call = userApi.loginPin(loginDto);
         call.enqueue(new Callback<User>() {
@@ -195,6 +187,8 @@ public class LoginPin extends AppCompatActivity {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.e("Error:",t.getMessage());
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(),"Something wrong happened", Toast.LENGTH_LONG).show();
             }
 
         });
