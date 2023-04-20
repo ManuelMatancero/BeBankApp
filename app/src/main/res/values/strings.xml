@@ -3,10 +3,10 @@
     <string name="beBank">BeBank</string>
     <string name="user">User</string>
     <string name="pass">Password</string>
-    <string name="userin">user</string>
-    <string name="passin">********</string>
-    <string name="login">LOGIN</string>
-    <string name="fPass">FORGOT PASSWORD?</string>
+    <string name="userin">Type your User</string>
+    <string name="passin">Type your Password</string>
+    <string name="login">Login</string>
+    <string name="fPass">Forgot password?</string>
     <string name="savings">Savings Account / </string>
     <string name="money">Money:</string>
     <string name="details">Details</string>

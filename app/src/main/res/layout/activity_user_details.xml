@@ -9,7 +9,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="#000000"
+        android:background="@drawable/gardient_bar"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
-            android:background="@color/black"
+            android:background="@color/transparet"
             app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:text="@string/fName"
             android:textSize="22sp"
-            android:textColor="@color/black"
+            android:textColor="@color/purple"
             android:textStyle="bold"
             />
 
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:text="@string/email"
             android:textSize="22sp"
-            android:textColor="@color/black"
+            android:textColor="@color/purple"
             android:textStyle="bold"/>
 
         <TextView
@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ntmChange"
             android:textSize="22sp"
-            android:textColor="@color/black"
+            android:textColor="@color/purple"
             android:textStyle="bold"
             android:fontFamily="@font/abel"
             app:drawableStartCompat="@drawable/ic_baseline_privacy_tip_24"/>

@@ -9,7 +9,8 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="#000000"
+        android:background="@drawable/gardient_bar"
+        android:elevation="6dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +25,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/abel"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="@string/pin"
             android:textColor="@color/white"
             android:textSize="25sp" />
@@ -34,10 +36,10 @@
             android:layout_height="match_parent"
             android:text="@string/unlink"
             android:textSize="18sp"
-            android:textColor="@color/white"
+            android:textColor="@color/purple"
             android:textStyle="bold"
             android:textAllCaps="false"
-            android:background="@color/black" />
+            android:background="@color/transparet" />
     </LinearLayout>
 
     <ScrollView
@@ -127,7 +129,7 @@
                 android:id="@+id/log"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_black"
+                android:background="@drawable/rounded_purple"
                 app:srcCompat="@drawable/next_white"
                 android:layout_gravity="center"
                 android:layout_marginTop="100dp"/>

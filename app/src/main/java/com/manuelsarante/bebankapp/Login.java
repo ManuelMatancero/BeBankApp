@@ -115,6 +115,8 @@ public class Login extends AppCompatActivity{
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.e("Error:",t.getMessage());
+                Toast.makeText(getApplicationContext(),"Check internet connection or try again later", Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
         });
