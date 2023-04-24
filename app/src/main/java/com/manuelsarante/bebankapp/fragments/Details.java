@@ -18,6 +18,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -27,7 +29,7 @@ import java.util.Locale;
  */
 public class Details extends Fragment {
 
-    TextView cvv, cardNumber, name, validDate,money, accountNumber;
+    TextView cvv, cardNumber, name, validDate,money, accountNumber,lastDigit;
     View view;
 
 
@@ -86,11 +88,27 @@ public class Details extends Fragment {
         cardNumber = view.findViewById(R.id.cardNumber);
         name = view.findViewById(R.id.name);
         validDate = view.findViewById(R.id.validDate);
+        lastDigit = view.findViewById(R.id.lastDigit);
 
 
         if (data != null) {
             User myString = (User) data.getSerializable("myData");
             BankingAccount ba = (BankingAccount) data.getSerializable("myAc");
+            //Here I get the card Number of the card of the account
+            String cardNum = String.valueOf(ba.getCards().getCardNumber());
+            //Create a String builder to append the last 4 digits of the card
+            StringBuilder last4Number = new StringBuilder();
+            List<String> numbersListed = new ArrayList<>();
+            //here i add the numbers of the card in a list
+            for(int i = 0; i<16 ; i++){
+                numbersListed.add(String.valueOf(cardNum.charAt(i)));
+            }
+            //get the last 4 numbers
+            for(int i =12; i<16; i++){
+                last4Number.append(numbersListed.get(i));
+            }
+            //set the last 4 numbers to the textview
+            lastDigit.setText(last4Number.toString());
             name.setText(myString.getName());
             cvv.setText(String.valueOf(ba.getCards().getCvv()));
             //Setting the pattern #### #### to the card number

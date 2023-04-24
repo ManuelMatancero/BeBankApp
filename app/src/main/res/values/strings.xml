@@ -17,7 +17,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cvv">cvv</string>
-    <string name="vUntil">Valid\nuntil</string>
+    <string name="vUntil">Valid until</string>
     <string name="empty">This user does not has accounts</string>
     <string name="pin">Secret PIN</string>
     <string name="unlink">Unlink</string>

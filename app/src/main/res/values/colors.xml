@@ -12,5 +12,5 @@
     <color name="purple">#8017AB</color>
     <color name="gray_01">#E0E0E0</color>
     <color name="transparet">#00FFFFFF</color>
-
+    <color name="darkgray">#212121</color>
 </resources>
