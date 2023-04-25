@@ -160,7 +160,8 @@ public class LoginPin extends AppCompatActivity {
     }
 
     public void login(LoginWithPinDto loginDto){
-        userApi = Apis.getUser();
+        Apis api = new Apis();
+        UserApi userApi = api.getUser();
         Call<User> call = userApi.loginPin(loginDto);
         call.enqueue(new Callback<User>() {
             @Override

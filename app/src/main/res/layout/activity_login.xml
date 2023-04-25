@@ -97,12 +97,11 @@
         android:id="@+id/textView"
         android:layout_width="150dp"
         android:layout_height="80dp"
-        android:layout_marginTop="50dp"
         android:scaleType="centerCrop"
         android:src="@drawable/logosimplified"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -116,5 +115,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:srcCompat="@drawable/logowhite" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="365dp"
+        android:background="@color/transparet"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_settings_24"
+        android:elevation="6dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

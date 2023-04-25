@@ -49,4 +49,5 @@ public class UserCredentials {
     public void setPin(String pin) {
         this.pin = pin;
     }
+
 }
