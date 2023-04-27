@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BeBankApp</string>
+    <string name="app_name">Be.Bank</string>
     <string name="beBank">BeBank</string>
     <string name="user">User</string>
     <string name="pass">Password</string>
@@ -28,7 +28,7 @@
     <string name="pMessage">For your protection, some of this information can not be changed without contacting us.</string>
     <string name="ipAddress">Add the IP Address of the server</string>
     <string name="ipHint">192.123.12.1:8080/</string>
-    <string name="setPin">Set PIN</string>
+    <string name="setPin">Put the PIN</string>
     <string name="showLess">- Show less</string>
     <string name="showMore">+ Show more</string>
 

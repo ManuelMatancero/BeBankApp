@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,7 @@ import retrofit2.Response;
 public class Login extends AppCompatActivity{
 
     EditText user, pass, ip;
+    TextView forgotPass;
     Button btnLogin;
     ImageButton add, imageButton;
     ProgressBar progressBar;
@@ -63,6 +65,7 @@ public class Login extends AppCompatActivity{
         btnLogin = findViewById(R.id.button);
         progressBar = findViewById(R.id.progresbar);
         imageButton = findViewById(R.id.imageButton);
+        forgotPass = findViewById(R.id.forgotPass);
 
         //Conection and creation of the database
         db = AppDatabase.getInstance(Login.this);
@@ -103,6 +106,22 @@ public class Login extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 createDialog();
+            }
+        });
+
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(Login.this);
+                builder.setTitle("Information");
+                builder.setMessage(getResources().getString(R.string.pMessage));
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
             }
         });
 
