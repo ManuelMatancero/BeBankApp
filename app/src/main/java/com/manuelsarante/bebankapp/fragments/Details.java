@@ -50,6 +50,8 @@ import retrofit2.Response;
  */
 public class Details extends Fragment {
 
+
+
     TextView cvv, cardNumber, name, validDate,money, accountNumber,lastDigit,showMore;
     View view;
     EditText digit1, digit2, digit3, digit4;
