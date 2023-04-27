@@ -1,18 +1,35 @@
 package com.manuelsarante.bebankapp.fragments;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.manuelsarante.bebankapp.LoginPin;
+import com.manuelsarante.bebankapp.MainActivity;
 import com.manuelsarante.bebankapp.R;
+import com.manuelsarante.bebankapp.api.UserApi;
+import com.manuelsarante.bebankapp.dto.LoginWithPinDto;
 import com.manuelsarante.bebankapp.models.BankingAccount;
 import com.manuelsarante.bebankapp.models.User;
+import com.manuelsarante.bebankapp.room.dao.UserCredentialsDao;
+import com.manuelsarante.bebankapp.room.database.AppDatabase;
+import com.manuelsarante.bebankapp.room.models.UserCredentials;
+import com.manuelsarante.bebankapp.utils.Apis;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -22,6 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Details#newInstance} factory method to
@@ -29,9 +50,18 @@ import java.util.Locale;
  */
 public class Details extends Fragment {
 
-    TextView cvv, cardNumber, name, validDate,money, accountNumber,lastDigit;
+    TextView cvv, cardNumber, name, validDate,money, accountNumber,lastDigit,showMore;
     View view;
-
+    EditText digit1, digit2, digit3, digit4;
+    ProgressBar progressBar;
+    AlertDialog.Builder dialogBuilder;
+    AlertDialog dialog;
+    LinearLayout backPartCard;
+    StringBuilder pin = new StringBuilder();
+    //Database variables
+    AppDatabase db;
+    UserCredentialsDao userCredentialsDao;
+    UserCredentials userCredentials = new UserCredentials();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,7 +119,12 @@ public class Details extends Fragment {
         name = view.findViewById(R.id.name);
         validDate = view.findViewById(R.id.validDate);
         lastDigit = view.findViewById(R.id.lastDigit);
+        showMore = view.findViewById(R.id.showMore);
+        backPartCard = view.findViewById(R.id.linearLayout5);
 
+        //Database instance
+        db = AppDatabase.getInstance(getContext());
+        userCredentialsDao = db.userCredentialsDao();
 
         if (data != null) {
             User myString = (User) data.getSerializable("myData");
@@ -133,7 +168,149 @@ public class Details extends Fragment {
         } else{
             Toast.makeText(getContext(), "Null Bundle", Toast.LENGTH_SHORT).show();
         }
+        showMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if backPart of the card is Shown it will go invisible
+                if(backPartCard.isShown()){
+                    backPartCard.setVisibility(View.INVISIBLE);
+                    showMore.setText(getContext().getString(R.string.showMore));
+                }else{
+                    createDialog();
+                }
+
+            }
+        });
 
         return view;
+    }
+    //Dialog to add the pin and see the card info
+    public void createDialog(){
+        dialogBuilder = new AlertDialog.Builder(getContext());
+        final View editPopUp = getLayoutInflater().inflate(R.layout.popup_pin, null);
+        digit1 = (EditText) editPopUp.findViewById(R.id.digit1);
+        digit2 = (EditText) editPopUp.findViewById(R.id.digit2);
+        digit3 = (EditText) editPopUp.findViewById(R.id.digit3);
+        digit4 = (EditText) editPopUp.findViewById(R.id.digit4);
+        progressBar =(ProgressBar) editPopUp.findViewById(R.id.progresbar);
+
+
+        dialogBuilder.setView(editPopUp);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        //This code is to go to next textview when text is changed
+        digit1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                digit2.requestFocus();
+                pin.append(digit1.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        digit2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                digit3.requestFocus();
+                pin.append(digit2.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        digit3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                digit4.requestFocus();
+                pin.append(digit3.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        digit4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pin.append(digit4.getText().toString());
+                //if digit 4 is different of empty it will try to get the user
+                if(!digit4.getText().toString().equals("")){
+                    //here when the text change in digit 4 will be conecting to the local database and then with the API
+                    UserCredentials userCredentials = userCredentialsDao.getAll().get(0);
+                    progressBar.setVisibility(View.VISIBLE);
+                    LoginWithPinDto log = new LoginWithPinDto();
+                    log.setUser(userCredentials.getUser());
+                    log.setPassword(userCredentials.getPassword());
+                    log.setPin(pin.toString());
+                    login(log);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
+    public void login(LoginWithPinDto loginDto){
+        Apis api = new Apis();
+        UserApi userApi = api.getUser();
+        Call<User> call = userApi.loginPin(loginDto);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()) {
+                  backPartCard.setVisibility(View.VISIBLE);
+                  pin.setLength(0);
+                  dialog.dismiss();
+                  showMore.setText(getContext().getString(R.string.showLess));
+                }else if(response.code()==404){
+                    Toast.makeText(getContext(),"Incorrect PIN", Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                    digit1.setText("");
+                    digit2.setText("");
+                    digit3.setText("");
+                    digit4.setText("");
+                    digit1.requestFocus();
+                    pin.setLength(0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("Error:",t.getMessage());
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getContext(),"Something wrong happened", Toast.LENGTH_LONG).show();
+            }
+
+        });
+
     }
 }

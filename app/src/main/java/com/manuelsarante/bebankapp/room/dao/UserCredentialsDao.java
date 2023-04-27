@@ -16,6 +16,9 @@ public interface UserCredentialsDao {
     @Query("SELECT * FROM UserCredentials")
     List<UserCredentials> getAll();
 
+    @Query("UPDATE UserCredentials SET pin =:ePin WHERE idUserCredentials =:id")
+    void updatePin(int id, String ePin);
+
     @Insert
     void insertUserCredential(UserCredentials userCredentials);
 

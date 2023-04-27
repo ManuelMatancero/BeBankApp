@@ -96,7 +96,6 @@ public class Login extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(), "Add the URL before login", Toast.LENGTH_LONG).show();
                     createDialog();
                 }
-
             }
         });
         //here I create the dialog to add the ip address
@@ -124,13 +123,13 @@ public class Login extends AppCompatActivity{
                    userCredentials.setPassword(pass.getText().toString());
                    userCredentials.setPin(user.getPin());
                    //Save the entrie once
-                    userCredentialsDao.insertUserCredential(userCredentials);
+                   userCredentialsDao.insertUserCredential(userCredentials);
 
-                    progressBar.setVisibility(View.INVISIBLE);
-                    Intent i = new Intent(Login.this, MainActivity.class);
-                    i.putExtra("user", user);
-                    startActivity(i);
-                    finish();
+                   progressBar.setVisibility(View.INVISIBLE);
+                   Intent i = new Intent(Login.this, MainActivity.class);
+                   i.putExtra("user", user);
+                   startActivity(i);
+                   finish();
                 }else if(response.code()==404){
                     Toast.makeText(getApplicationContext(),"Incorrect Password or User not found", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
