@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.manuelsarante.bebankapp.api.UserApi;
+import com.manuelsarante.bebankapp.dto.AuthenticationResponse;
 import com.manuelsarante.bebankapp.dto.LoginDto;
 import com.manuelsarante.bebankapp.models.BankingAccount;
 import com.manuelsarante.bebankapp.models.User;
@@ -27,19 +28,21 @@ import com.manuelsarante.bebankapp.room.models.IpAddress;
 import com.manuelsarante.bebankapp.room.models.UserCredentials;
 import com.manuelsarante.bebankapp.utils.Apis;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+
 import java.util.List;
 
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Login extends AppCompatActivity{
 
+public class Login extends AppCompatActivity{
+    String token;
     EditText user, pass, ip;
     TextView forgotPass;
-    Button btnLogin;
+    Button btnLogin, jwt;
     ImageButton add, imageButton;
     ProgressBar progressBar;
     AlertDialog.Builder dialogBuilder;
@@ -66,6 +69,7 @@ public class Login extends AppCompatActivity{
         progressBar = findViewById(R.id.progresbar);
         imageButton = findViewById(R.id.imageButton);
         forgotPass = findViewById(R.id.forgotPass);
+        jwt = findViewById(R.id.jwt);
 
         //Conection and creation of the database
         db = AppDatabase.getInstance(Login.this);
@@ -125,12 +129,48 @@ public class Login extends AppCompatActivity{
             }
         });
 
+        //this button is to try, and generate the jwt to save it in a variable and then send it in the header of the request
+        //Here i user a user that is registered in the database to get access
+        jwt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginDto dto = new LoginDto();
+                dto.setUser("matancita");
+                dto.setPassword("123456");
+                Apis apis = new Apis();
+                UserApi userApi = apis.getUser();
+                Call<ResponseBody> call = userApi.filterChain(dto);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.code()==200) {
+                            //Here i get the token from the header of the response
+                            token = response.headers().get("Authorization");
+                            Toast.makeText(getApplicationContext(),"Authorized " + token, Toast.LENGTH_LONG).show();
+                        }
+                        else if(response.code()==401){
+                            Toast.makeText(getApplicationContext(),"Access Unauthorized11", Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("Error:",t.getMessage());
+                        Toast.makeText(getApplicationContext(),"Check internet connection or check the URL", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+
+                });
+
+            }
+        });
+
     }
 
     public void login(LoginDto loginDto){
         Apis api = new Apis();
         UserApi userApi = api.getUser();
-        Call<User> call = userApi.login(loginDto);
+        Call<User> call = userApi.login(token, loginDto);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -153,6 +193,10 @@ public class Login extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(),"Incorrect Password or User not found", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
                     pass.setError("Incorrect Password");
+                }
+                else if(response.code()==401){
+                    Toast.makeText(getApplicationContext(),"Access Unauthorized", Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -184,6 +228,7 @@ public class Login extends AppCompatActivity{
         }
     }
 
+    //Here shows the dialog to add the ip address
     public void createDialog(){
         dialogBuilder = new AlertDialog.Builder(this);
         final View editPopUp = getLayoutInflater().inflate(R.layout.popup, null);

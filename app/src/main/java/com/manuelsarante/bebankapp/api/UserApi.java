@@ -1,14 +1,20 @@
 package com.manuelsarante.bebankapp.api;
 
+import com.manuelsarante.bebankapp.dto.AuthenticationResponse;
 import com.manuelsarante.bebankapp.dto.LoginDto;
 import com.manuelsarante.bebankapp.dto.LoginWithPinDto;
 import com.manuelsarante.bebankapp.models.User;
 
 import java.util.List;
 
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okhttp3.internal.http2.Http2;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -18,11 +24,16 @@ public interface UserApi {
     Call<List<User>> getUsers();
 
     @POST("user/login")
-    Call<User> login(@Body LoginDto loginDto);
+    Call<User> login(@Header ("Authorization") String token, @Body LoginDto loginDto);
 
     @POST("user/pinlogin")
     Call<User> loginPin(@Body LoginWithPinDto loginWithPinDto);
 
     @GET("user/{id}")
     Call<User> getCliente(@Path("id") int userId);
+
+    //With this endpoint we reicive the jwtoken in the header of the request
+    @POST("jwt")
+    Call<ResponseBody> filterChain(@Body LoginDto loginDto);
+
 }
