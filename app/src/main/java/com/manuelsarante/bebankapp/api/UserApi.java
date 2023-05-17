@@ -27,13 +27,13 @@ public interface UserApi {
     Call<User> login(@Header ("Authorization") String token, @Body LoginDto loginDto);
 
     @POST("user/pinlogin")
-    Call<User> loginPin(@Body LoginWithPinDto loginWithPinDto);
+    Call<User> loginPin(@Header ("Authorization") String token, @Body LoginWithPinDto loginWithPinDto);
 
     @GET("user/{id}")
     Call<User> getCliente(@Path("id") int userId);
 
     //With this endpoint we reicive the jwtoken in the header of the request
     @POST("jwt")
-    Call<ResponseBody> filterChain(@Body LoginDto loginDto);
+    Call<ResponseBody> getToken(@Body LoginDto loginDto);
 
 }

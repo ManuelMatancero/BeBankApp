@@ -18,8 +18,10 @@ import android.widget.Toast;
 import com.manuelsarante.bebankapp.api.UserApi;
 import com.manuelsarante.bebankapp.dto.LoginWithPinDto;
 import com.manuelsarante.bebankapp.models.User;
+import com.manuelsarante.bebankapp.room.dao.JwebTokenDao;
 import com.manuelsarante.bebankapp.room.dao.UserCredentialsDao;
 import com.manuelsarante.bebankapp.room.database.AppDatabase;
+import com.manuelsarante.bebankapp.room.models.JwebToken;
 import com.manuelsarante.bebankapp.room.models.UserCredentials;
 import com.manuelsarante.bebankapp.utils.Apis;
 
@@ -39,7 +41,9 @@ public class LoginPin extends AppCompatActivity {
     //Database variables
     AppDatabase db;
     UserCredentialsDao userCredentialsDao;
+    JwebTokenDao jwebTokenDao;
     UserCredentials userCredentials = new UserCredentials();
+    JwebToken jwebToken = new JwebToken();
 
 
     @Override
@@ -60,6 +64,7 @@ public class LoginPin extends AppCompatActivity {
         //Database instance
         db = AppDatabase.getInstance(LoginPin.this);
         userCredentialsDao = db.userCredentialsDao();
+        jwebTokenDao = db.jwebTokenDao();
 
         //This code is to go to next textview when text is changed
         digit1.addTextChangedListener(new TextWatcher() {
@@ -162,7 +167,7 @@ public class LoginPin extends AppCompatActivity {
     public void login(LoginWithPinDto loginDto){
         Apis api = new Apis();
         UserApi userApi = api.getUser();
-        Call<User> call = userApi.loginPin(loginDto);
+        Call<User> call = userApi.loginPin(loginDto);//////////////////////////////////////////In this line there is an error because i have to pass the token as parameter
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

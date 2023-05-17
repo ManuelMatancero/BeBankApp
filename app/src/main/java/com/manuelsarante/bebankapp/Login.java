@@ -22,13 +22,16 @@ import com.manuelsarante.bebankapp.dto.LoginDto;
 import com.manuelsarante.bebankapp.models.BankingAccount;
 import com.manuelsarante.bebankapp.models.User;
 import com.manuelsarante.bebankapp.room.dao.IpAddressDao;
+import com.manuelsarante.bebankapp.room.dao.JwebTokenDao;
 import com.manuelsarante.bebankapp.room.dao.UserCredentialsDao;
 import com.manuelsarante.bebankapp.room.database.AppDatabase;
 import com.manuelsarante.bebankapp.room.models.IpAddress;
+import com.manuelsarante.bebankapp.room.models.JwebToken;
 import com.manuelsarante.bebankapp.room.models.UserCredentials;
 import com.manuelsarante.bebankapp.utils.Apis;
 
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -40,6 +43,9 @@ import retrofit2.Response;
 
 public class Login extends AppCompatActivity{
     String token;
+    private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 120L;
+    long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1000;
+    LoginDto log = new LoginDto();
     EditText user, pass, ip;
     TextView forgotPass;
     Button btnLogin, jwt;
@@ -52,9 +58,11 @@ public class Login extends AppCompatActivity{
     //Database Variables
     AppDatabase db;
     UserCredentialsDao userCredentialsDao;
+    JwebTokenDao jwebTokenDao;
     IpAddressDao ipAddressDao;
     UserCredentials userCredentials = new UserCredentials();
     IpAddress ipAddress = new IpAddress();
+    JwebToken jwebToken = new JwebToken();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +83,11 @@ public class Login extends AppCompatActivity{
         db = AppDatabase.getInstance(Login.this);
         userCredentialsDao = db.userCredentialsDao();
         ipAddressDao = db.ipAddressDao();
+        jwebTokenDao = db.jwebTokenDao();
 
         //Check If user did log in
         checkIfUserLoged();
 
-
-        LoginDto log = new LoginDto();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +104,9 @@ public class Login extends AppCompatActivity{
                         progressBar.setVisibility(View.VISIBLE);
                         log.setUser(user.getText().toString());
                         log.setPassword(pass.getText().toString());
-                        login(log);
+                        //here i get the jsonwebtoken fromn api and if the value of token is null it is goign to give me an error
+                        //but in case that the response is successful it will run the login method
+                        getJwtFromApi(log);
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "Add the URL before login", Toast.LENGTH_LONG).show();
@@ -129,86 +138,83 @@ public class Login extends AppCompatActivity{
             }
         });
 
-        //this button is to try, and generate the jwt to save it in a variable and then send it in the header of the request
-        //Here i user a user that is registered in the database to get access
-        jwt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginDto dto = new LoginDto();
-                dto.setUser("matancita");
-                dto.setPassword("123456");
-                Apis apis = new Apis();
-                UserApi userApi = apis.getUser();
-                Call<ResponseBody> call = userApi.filterChain(dto);
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.code()==200) {
-                            //Here i get the token from the header of the response
-                            token = response.headers().get("Authorization");
-                            Toast.makeText(getApplicationContext(),"Authorized " + token, Toast.LENGTH_LONG).show();
-                        }
-                        else if(response.code()==401){
-                            Toast.makeText(getApplicationContext(),"Access Unauthorized11", Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("Error:",t.getMessage());
-                        Toast.makeText(getApplicationContext(),"Check internet connection or check the URL", Toast.LENGTH_LONG).show();
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }
-
-                });
-
-            }
-        });
-
     }
 
     public void login(LoginDto loginDto){
         Apis api = new Apis();
         UserApi userApi = api.getUser();
-        Call<User> call = userApi.login(token, loginDto);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()) {
-                   User user = response.body();
-                   //Passing data to the UserCredentials to save it in the database
-                   userCredentials.setUser(user.getUser());
-                   //Here i pass the password from the edit text to avoid pass the hash coded password from database
-                   userCredentials.setPassword(pass.getText().toString());
-                   userCredentials.setPin(user.getPin());
-                   //Save the entrie once
-                   userCredentialsDao.insertUserCredential(userCredentials);
+            Call<User> call = userApi.login(token, loginDto);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if(response.isSuccessful()) {
+                        User user = response.body();
+                        //Passing data to the UserCredentials to save it in the database
+                        userCredentials.setUser(user.getUser());
+                        //Here i pass the password from the edit text to avoid pass the hash coded password from database
+                        userCredentials.setPassword(pass.getText().toString());
+                        userCredentials.setPin(user.getPin());
+                        //Save the entrie once
+                        userCredentialsDao.insertUserCredential(userCredentials);
 
-                   progressBar.setVisibility(View.INVISIBLE);
-                   Intent i = new Intent(Login.this, MainActivity.class);
-                   i.putExtra("user", user);
-                   startActivity(i);
-                   finish();
-                }else if(response.code()==404){
-                    Toast.makeText(getApplicationContext(),"Incorrect Password or User not found", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Intent i = new Intent(Login.this, MainActivity.class);
+                        i.putExtra("user", user);
+                        startActivity(i);
+                        finish();
+                    }else if(response.code()==404){
+                        Toast.makeText(getApplicationContext(),"Incorrect Password or User not found", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        pass.setError("Incorrect Password");
+                    }
+                    else if(response.code()==401){
+                        Toast.makeText(getApplicationContext(),"Access Unauthorized", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e("Error:",t.getMessage());
+                    Toast.makeText(getApplicationContext(),"Check internet connection or check the URL", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
-                    pass.setError("Incorrect Password");
+                }
+
+            });
+
+    }
+
+    public void getJwtFromApi(LoginDto loginDto){
+
+        Apis apis = new Apis();
+        UserApi userApi = apis.getUser();
+        Call<ResponseBody> call = userApi.getToken(loginDto);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.code()==200) {
+                    //Here i get the token from the header of the response
+                    token = response.headers().get("Authorization");
+                    //After i get the JWT i save it in a local database for a future use wen login with PIN
+                    jwebToken.setJsonWebToken(token);
+                    Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
+                    jwebToken.setExpirationDate(String.valueOf(expirationDate));
+                    jwebTokenDao.insertJwt(jwebToken);
+                    login(log);
                 }
                 else if(response.code()==401){
-                    Toast.makeText(getApplicationContext(),"Access Unauthorized", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Password or User are incorrect", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }
-
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("Error:",t.getMessage());
                 Toast.makeText(getApplicationContext(),"Check internet connection or check the URL", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
             }
 
         });
-
     }
 
     @Override
