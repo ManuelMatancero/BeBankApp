@@ -3,6 +3,8 @@ package com.manuelsarante.bebankapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,6 +26,13 @@ import com.manuelsarante.bebankapp.room.database.AppDatabase;
 import com.manuelsarante.bebankapp.room.models.JwebToken;
 import com.manuelsarante.bebankapp.room.models.UserCredentials;
 import com.manuelsarante.bebankapp.utils.Apis;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -155,11 +164,7 @@ public class LoginPin extends AppCompatActivity {
         unlink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userCredentials = userCredentialsDao.getAll().get(0);
-                userCredentialsDao.deleteUserCredentials(userCredentials);
-                Intent i= new Intent(LoginPin.this, Login.class);
-                startActivity(i);
-                finish();
+                unlinkUser();
             }
         });
     }
@@ -167,37 +172,75 @@ public class LoginPin extends AppCompatActivity {
     public void login(LoginWithPinDto loginDto){
         Apis api = new Apis();
         UserApi userApi = api.getUser();
-        Call<User> call = userApi.loginPin(loginDto);//////////////////////////////////////////In this line there is an error because i have to pass the token as parameter
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()) {
-                    User user = response.body();
-                    progressBar.setVisibility(View.INVISIBLE);
-                    Intent i = new Intent(LoginPin.this, MainActivity.class);
-                    i.putExtra("user", user);
-                    startActivity(i);
-                    finish();
-                }else if(response.code()==404){
-                    Toast.makeText(getApplicationContext(),"Incorrect PIN", Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.INVISIBLE);
-                    digit1.setText("");
-                    digit2.setText("");
-                    digit3.setText("");
-                    digit4.setText("");
-                    digit1.requestFocus();
-                    pin.setLength(0);
+        //here i get the object with the jsonWebToken to see if the date expired
+        jwebToken = jwebTokenDao.getAll().get(0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy");
+        LocalDateTime expireDate = LocalDateTime.parse(jwebToken.getExpirationDate(), formatter);
+        LocalDateTime currentTime = LocalDateTime.now();
+        //Here i check if the jsonwebtoken has expired in order to get a new one in case that this be true
+        int comparisonResult = currentTime.compareTo(expireDate);
+        if(comparisonResult>=0){
+            createPopUp();
+        }else{
+            Call<User> call = userApi.loginPin(jwebToken.getJsonWebToken(), loginDto);//////////////////////////////////////////In this line there is an error because i have to pass the token as parameter
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if(response.isSuccessful()) {
+                        User user = response.body();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Intent i = new Intent(LoginPin.this, MainActivity.class);
+                        i.putExtra("user", user);
+                        startActivity(i);
+                        finish();
+                    }else if(response.code()==404){
+                        Toast.makeText(getApplicationContext(),"Incorrect PIN", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        digit1.setText("");
+                        digit2.setText("");
+                        digit3.setText("");
+                        digit4.setText("");
+                        digit1.requestFocus();
+                        pin.setLength(0);
+                    }
                 }
-            }
 
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e("Error:",t.getMessage());
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(),"Something wrong happened", Toast.LENGTH_LONG).show();
+                }
+
+            });
+        }
+
+
+    }
+
+    public void unlinkUser(){
+        //Here i erase the user credentiasl saved locally
+        //And the jwebToken
+        userCredentials = userCredentialsDao.getAll().get(0);
+        userCredentialsDao.deleteUserCredentials(userCredentials);
+        jwebToken = jwebTokenDao.getAll().get(0);
+        jwebTokenDao.deleteJwt(jwebToken);
+        Intent i= new Intent(LoginPin.this, Login.class);
+        startActivity(i);
+        finish();
+    }
+
+    //This popup message let know the user that that the Jwebtoken has expired and needs to login again
+    public void createPopUp(){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(LoginPin.this);
+        builder.setTitle("Information");
+        builder.setMessage(getResources().getString(R.string.jwebExpired));
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.e("Error:",t.getMessage());
-                progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(),"Something wrong happened", Toast.LENGTH_LONG).show();
+            public void onClick(DialogInterface dialog, int which) {
+                unlinkUser();
             }
-
         });
-
+        builder.show();
     }
 }

@@ -48,7 +48,7 @@ public class Login extends AppCompatActivity{
     LoginDto log = new LoginDto();
     EditText user, pass, ip;
     TextView forgotPass;
-    Button btnLogin, jwt;
+    Button btnLogin;
     ImageButton add, imageButton;
     ProgressBar progressBar;
     AlertDialog.Builder dialogBuilder;
@@ -77,7 +77,6 @@ public class Login extends AppCompatActivity{
         progressBar = findViewById(R.id.progresbar);
         imageButton = findViewById(R.id.imageButton);
         forgotPass = findViewById(R.id.forgotPass);
-        jwt = findViewById(R.id.jwt);
 
         //Conection and creation of the database
         db = AppDatabase.getInstance(Login.this);
