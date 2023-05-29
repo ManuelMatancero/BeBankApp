@@ -48,7 +48,7 @@ public class Login extends AppCompatActivity{
     LoginDto log = new LoginDto();
     EditText user, pass, ip;
     TextView forgotPass;
-    Button btnLogin;
+    Button btnLogin, createAccount;
     ImageButton add, imageButton;
     ProgressBar progressBar;
     AlertDialog.Builder dialogBuilder;
@@ -77,6 +77,7 @@ public class Login extends AppCompatActivity{
         progressBar = findViewById(R.id.progresbar);
         imageButton = findViewById(R.id.imageButton);
         forgotPass = findViewById(R.id.forgotPass);
+        createAccount = findViewById(R.id.createUser);
 
         //Conection and creation of the database
         db = AppDatabase.getInstance(Login.this);
@@ -86,6 +87,15 @@ public class Login extends AppCompatActivity{
 
         //Check If user did log in
         checkIfUserLoged();
+
+        //Button to takeyo to the regiter form
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Login.this, Register.class);
+                startActivity(i);
+            }
+        });
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

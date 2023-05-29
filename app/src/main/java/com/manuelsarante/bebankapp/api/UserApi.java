@@ -29,6 +29,9 @@ public interface UserApi {
     @POST("user/pinlogin")
     Call<User> loginPin(@Header ("Authorization") String token, @Body LoginWithPinDto loginWithPinDto);
 
+    @POST("user/save")
+    Call<User> createUser(@Body User user);
+
     @GET("user/{id}")
     Call<User> getCliente(@Path("id") int userId);
 

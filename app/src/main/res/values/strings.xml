@@ -31,6 +31,11 @@
     <string name="setPin">Put the PIN</string>
     <string name="showLess">- Show less</string>
     <string name="showMore">+ Show more</string>
+    <string name="or">OR</string>
+    <string name="cPassword">Confifm password</string>
+    <string name="cPin">Confirm PIN</string>
+    <string name="createAccount">Create an account</string>
+    <string name="createUser">Create account</string>
     <string name="jwebExpired">Your session has expired in order to access you have to do login again with your user and password</string>
 
 </resources>
