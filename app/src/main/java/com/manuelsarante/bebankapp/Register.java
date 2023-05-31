@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class Register extends AppCompatActivity {
 
     EditText txtFullName, email, txtUser, password, cPassword, pin, cPin;
     Button create;
+    ImageButton goBack;
     ProgressBar progressBar;
 
     @Override
@@ -44,6 +46,7 @@ public class Register extends AppCompatActivity {
         cPin = findViewById(R.id.cPin);
         create = findViewById(R.id.createUser);
         progressBar = findViewById(R.id.progresbar);
+        goBack = findViewById(R.id.goBack);
         List<TextView> textViews = new ArrayList<>();
 
         create.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +110,13 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        //Go back button
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
     }

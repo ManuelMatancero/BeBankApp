@@ -18,7 +18,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cvv">cvv</string>
     <string name="vUntil">Valid until</string>
-    <string name="empty">This user does not has accounts</string>
+    <string name="empty">To create a banking account go to our local building</string>
     <string name="pin">Secret PIN</string>
     <string name="unlink">Unlink</string>
     <string name="profile">My Profile</string>
