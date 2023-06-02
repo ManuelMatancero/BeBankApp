@@ -158,13 +158,17 @@ public class Details extends Fragment {
             name.setText(myString.getName());
             cvv.setText(String.valueOf(ba.getCards().getCvv()));
             //Setting the pattern #### #### to the card number
-            long number = Long.parseLong(ba.getCards().getCardNumber());
-            String formatted = String.format("%s %s %s %s",
-                    Long.toString(number).substring(0, 4),
-                    Long.toString(number).substring(4, 8),
-                    Long.toString(number).substring(8, 12),
-                    Long.toString(number).substring(12, 16));
-            cardNumber.setText(formatted);
+            String number = ba.getCards().getCardNumber();
+            StringBuilder numberFormated = new StringBuilder();
+            for(int i = 0 ; i < number.length(); i++){
+                int module = (i+1) % 4;
+                if(module==0){
+                    numberFormated.append(number.charAt(i)).append(" ");
+                }else{
+                    numberFormated.append(number.charAt(i));
+                }
+            }
+            cardNumber.setText(String.valueOf(numberFormated));
             //Parsing Card Date to LocalDate
             String date = ba.getCards().getExpireDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

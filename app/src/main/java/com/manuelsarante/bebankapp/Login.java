@@ -43,7 +43,7 @@ import retrofit2.Response;
 
 public class Login extends AppCompatActivity{
     String token;
-    private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 120L;
+    private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 7200L;
     long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1000;
     LoginDto log = new LoginDto();
     EditText user, pass, ip;
