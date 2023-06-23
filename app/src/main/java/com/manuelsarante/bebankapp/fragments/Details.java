@@ -1,10 +1,12 @@
 package com.manuelsarante.bebankapp.fragments;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -60,6 +62,7 @@ public class Details extends Fragment {
 
     TextView cvv, cardNumber, name, validDate,money, accountNumber,lastDigit,showMore;
     View view;
+    ImageButton btnCopy;
     EditText digit1, digit2, digit3, digit4;
     ProgressBar progressBar;
     AlertDialog.Builder dialogBuilder;
@@ -131,6 +134,8 @@ public class Details extends Fragment {
         lastDigit = view.findViewById(R.id.lastDigit);
         showMore = view.findViewById(R.id.showMore);
         backPartCard = view.findViewById(R.id.linearLayout5);
+        btnCopy = view.findViewById(R.id.copy);
+
 
         //Database instance
         db = AppDatabase.getInstance(getContext());
@@ -193,6 +198,23 @@ public class Details extends Fragment {
                 }else{
                     createDialog();
                 }
+
+            }
+        });
+
+        btnCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                // Gets a handle to the clipboard service.
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                // Creates a new text clip to put on the clipboard.
+                ClipData clip = ClipData.newPlainText("text", accountNumber.getText().toString());
+                // Set the clipboard's primary clip.
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(view.getContext(), "Account number copied", Toast.LENGTH_LONG).show();
+
 
             }
         });
