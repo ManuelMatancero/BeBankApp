@@ -37,5 +37,6 @@
     <string name="createAccount">Create an account</string>
     <string name="createUser">Create account</string>
     <string name="jwebExpired">Your session has expired in order to access you have to do login again with your user and password</string>
+    <string name="makeTr">Transfer</string>
 
 </resources>

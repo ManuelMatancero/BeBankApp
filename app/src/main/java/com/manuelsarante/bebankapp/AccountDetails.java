@@ -55,6 +55,15 @@ public class AccountDetails extends AppCompatActivity {
         detail.setArguments(data);
         fragmentTransaction.replace(R.id.fragment_container, detail).commit();
         /////////////////////////////////////////////////////////////////////////////
+        //Sending user and account from this Activity to Details Fragment
+        Transactions transactions = new Transactions();
+        FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
+        Bundle data2 = new Bundle();
+        data2.putSerializable("myData", user);
+        data2.putSerializable("myAc", account);
+        transactions.setArguments(data2);
+        fragmentTransaction2.replace(R.id.fragment_container, transactions).commit();
+        /////////////////////////////////////////////////////////////////////////////
 
         //Number format to give currency format to the amount
         NumberFormat nFormat = DecimalFormat.getCurrencyInstance(Locale.getDefault());

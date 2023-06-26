@@ -24,6 +24,18 @@ public class BankingAccount implements Serializable {
     @Expose
     private Cards cards;
 
+    @SerializedName("transactions")
+    @Expose
+    private List<AccountTransactions> transactions;
+
+    public List<AccountTransactions> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<AccountTransactions> transactions) {
+        this.transactions = transactions;
+    }
+
     public Long getIdAccount() {
         return idAccount;
     }
