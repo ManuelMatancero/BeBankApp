@@ -38,5 +38,8 @@
     <string name="createUser">Create account</string>
     <string name="jwebExpired">Your session has expired in order to access you have to do login again with your user and password</string>
     <string name="makeTr">Transfer</string>
+    <string name="acctotrans">Transfer to</string>
+    <string name="amounttotrans">Amount to transfer</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

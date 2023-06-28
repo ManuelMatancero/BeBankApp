@@ -4,6 +4,8 @@ import com.manuelsarante.bebankapp.dto.AuthenticationResponse;
 import com.manuelsarante.bebankapp.dto.LoginDto;
 import com.manuelsarante.bebankapp.dto.LoginWithPinDto;
 import com.manuelsarante.bebankapp.dto.Messages;
+import com.manuelsarante.bebankapp.dto.TransactionDto;
+import com.manuelsarante.bebankapp.models.AccountTransactions;
 import com.manuelsarante.bebankapp.models.User;
 
 import java.util.List;
@@ -39,5 +41,8 @@ public interface UserApi {
     //With this endpoint we reicive the jwtoken in the header of the request
     @POST("jwt")
     Call<ResponseBody> getToken(@Body LoginDto loginDto);
+
+    @POST("transactions/transfer")
+    Call<AccountTransactions> saveTransaction(@Header ("Authorization") String token, @Body TransactionDto transactionDto);
 
 }

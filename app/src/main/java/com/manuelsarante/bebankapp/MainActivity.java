@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity{
-    User user;
+    public static User user;
     BankingAccountsAdapter accountsAdapter;
     ListView list;
     TextView welcome, empty;

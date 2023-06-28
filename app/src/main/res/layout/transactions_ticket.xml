@@ -20,7 +20,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:text="pago de membresia"
             android:textColor="@color/purple_500"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:layout_gravity="center"/>
 
         <TextView
@@ -36,10 +36,5 @@
             android:layout_gravity="center"
             />
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/purple_500"
-        />
 
 </LinearLayout>
