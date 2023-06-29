@@ -14,11 +14,13 @@ public class UserDetails extends AppCompatActivity {
     TextView fName, email;
     ImageButton goBack;
 
+    public static UserDetails userDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
-
+        userDetails =this;
         fName = findViewById(R.id.fName);
         email = findViewById(R.id.email);
         goBack = findViewById(R.id.goBack);

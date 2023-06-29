@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.manuelsarante.bebankapp.MainActivity;
 import com.manuelsarante.bebankapp.R;
 import com.manuelsarante.bebankapp.Transfer;
+import com.manuelsarante.bebankapp.UserDetails;
 import com.manuelsarante.bebankapp.models.AccountTransactions;
 import com.manuelsarante.bebankapp.models.BankingAccount;
 

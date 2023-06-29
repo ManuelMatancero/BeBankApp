@@ -36,7 +36,7 @@ public interface UserApi {
     Call<Messages> createUser(@Body User user);
 
     @GET("user/{id}")
-    Call<User> getCliente(@Path("id") int userId);
+    Call<User> getUser(@Header ("Authorization") String token, @Path("id") Long userId);
 
     //With this endpoint we reicive the jwtoken in the header of the request
     @POST("jwt")
