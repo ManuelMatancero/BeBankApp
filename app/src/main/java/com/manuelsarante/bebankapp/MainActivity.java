@@ -79,15 +79,12 @@ public class MainActivity extends AppCompatActivity{
         jwebToken = jwebTokenDao.getAll().get(0);
         token = jwebToken.getJsonWebToken();
 
-        //Here within this method I also show the list of accounts
+        //Here within this method refresh and I also show the list of accounts
         //TODO: here i left Yesterday/////////////////////////////////////////////////
         refreshUserData();
 
         //Show welcome message on top of the activity
         welcome.setText("Welcome, " + user.getName());
-
-        //Gets the accounts from user
-        accounts = user.getBankingAccounts();
 
         //Do something when i click an element from the list
         //TODO: I have to check this because is not sending the correct ammount when i click one element
@@ -159,6 +156,8 @@ public class MainActivity extends AppCompatActivity{
                 if(response.isSuccessful()){
                     user = response.body();
                     showAccounts(user);
+                    //Gets the accounts from user
+                    accounts = user.getBankingAccounts();
                 } else if (response.code()==401) {
                     Toast.makeText(ma.getApplicationContext(), "Your sesion has expired, do login again",Toast.LENGTH_LONG).show();
                 }
@@ -171,6 +170,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+
     public void showAccounts(User user1){
         List<BankingAccount> accountList = user1.getBankingAccounts();
 
@@ -189,34 +189,9 @@ public class MainActivity extends AppCompatActivity{
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Toast.makeText(ma.getApplicationContext(), "on start", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Toast.makeText(ma.getApplicationContext(), "on resume", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Toast.makeText(ma.getApplicationContext(), "on pause", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(ma.getApplicationContext(), "on stop", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     protected void onRestart() {
         super.onRestart();
         refreshUserData();
-        Toast.makeText(ma.getApplicationContext(), "on restart", Toast.LENGTH_LONG).show();
     }
 
 }

@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.manuelsarante.bebankapp.AccountDetails;
 import com.manuelsarante.bebankapp.MainActivity;
 import com.manuelsarante.bebankapp.R;
 import com.manuelsarante.bebankapp.Transfer;
@@ -135,6 +136,7 @@ public class Transactions extends Fragment {
                 Intent i = new Intent(getContext(), Transfer.class);
                 i.putExtra("transferFrom", String.valueOf(bankingAccount.getAccountNumber()));
                 startActivity(i);
+                AccountDetails.accDetails.finish();
             }
         });
 

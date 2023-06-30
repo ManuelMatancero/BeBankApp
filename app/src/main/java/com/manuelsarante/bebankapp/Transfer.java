@@ -59,17 +59,43 @@ public class Transfer extends AppCompatActivity {
         //Getting transfer from account, from previous activity
         String transferFrom = getIntent().getStringExtra("transferFrom");
         //Setting transfer from in a textview
-        txvTrasnferFrom.setText(transferFrom);
+        txvTrasnferFrom.setText("Transfer from "+transferFrom);
 
         btnTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                TransactionDto transactionDto = new TransactionDto();
-                transactionDto.setActualAccount(transferFrom);
-                transactionDto.setAmount(Double.parseDouble(edtAmountToTransfer.getText().toString()));
-                transactionDto.setOutAccount(edtAccountToTransfer.getText().toString());
-                doTransfer(transactionDto);
+                if(edtAmountToTransfer.getText().toString().trim().isEmpty()||edtAccountToTransfer.getText().toString().trim().isEmpty()){
+                    if(edtAccountToTransfer.getText().toString().isEmpty()){
+                        edtAccountToTransfer.setError("This can not be empty");
+                    }
+                    if(edtAmountToTransfer.getText().toString().trim().isEmpty()){
+                        edtAmountToTransfer.setError("This can not be empty");
+                    }
+                }else if(edtAccountToTransfer.getText().toString().equals(transferFrom)){
+                    edtAccountToTransfer.setError("Can not send money within the same bank account");
+                }
+                else{
+                    progressBar.setVisibility(View.VISIBLE);
+                    TransactionDto transactionDto = new TransactionDto();
+                    transactionDto.setActualAccount(transferFrom);
+                    transactionDto.setAmount(Double.parseDouble(edtAmountToTransfer.getText().toString()));
+                    transactionDto.setOutAccount(edtAccountToTransfer.getText().toString());
+                    doTransfer(transactionDto);
+                }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
@@ -87,12 +113,15 @@ public class Transfer extends AppCompatActivity {
                 if(response.isSuccessful()){
                         progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(getApplicationContext(), "Transaction completed",Toast.LENGTH_LONG).show();
+                        finish();
 
                 } else if (response.code()==404) {
+                    progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(getApplicationContext(), "Account to transfer not found",Toast.LENGTH_LONG).show();
                 }
                 else if(response.code()==401){
-                    Toast.makeText(getApplicationContext(),"Access Unauthorized", Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(),"Access Unauthorized, do login again.", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }

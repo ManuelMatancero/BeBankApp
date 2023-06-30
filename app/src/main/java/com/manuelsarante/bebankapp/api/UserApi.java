@@ -6,6 +6,7 @@ import com.manuelsarante.bebankapp.dto.LoginWithPinDto;
 import com.manuelsarante.bebankapp.dto.Messages;
 import com.manuelsarante.bebankapp.dto.TransactionDto;
 import com.manuelsarante.bebankapp.models.AccountTransactions;
+import com.manuelsarante.bebankapp.models.BankingAccount;
 import com.manuelsarante.bebankapp.models.User;
 
 import java.util.List;
@@ -31,6 +32,9 @@ public interface UserApi {
 
     @POST("user/pinlogin")
     Call<User> loginPin(@Header ("Authorization") String token, @Body LoginWithPinDto loginWithPinDto);
+
+    @GET("account/{id}")
+    Call<BankingAccount> getBankingAccount(@Header ("Authorization") String token, @Path("id") Long id);
 
     @POST("user/save")
     Call<Messages> createUser(@Body User user);

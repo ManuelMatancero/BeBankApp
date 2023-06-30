@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,14 +17,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.manuelsarante.bebankapp.api.UserApi;
 import com.manuelsarante.bebankapp.fragments.Details;
 import com.manuelsarante.bebankapp.fragments.Transactions;
 import com.manuelsarante.bebankapp.models.BankingAccount;
 import com.manuelsarante.bebankapp.models.User;
+import com.manuelsarante.bebankapp.room.dao.JwebTokenDao;
+import com.manuelsarante.bebankapp.room.database.AppDatabase;
+import com.manuelsarante.bebankapp.room.models.JwebToken;
+import com.manuelsarante.bebankapp.utils.Apis;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountDetails extends AppCompatActivity {
 
@@ -32,15 +43,28 @@ public class AccountDetails extends AppCompatActivity {
     ImageButton goBack, logout;
     BottomNavigationView bottomNav;
 
+    AppDatabase db;
+    JwebToken jwebToken = new JwebToken();
+    JwebTokenDao jwebTokenDao;
+
+    public static Activity accDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_details);
 
+        accDetails = this;
+
         bottomNav= findViewById(R.id.bottom_navigation);
         ammount = findViewById(R.id.ammount);
         goBack = findViewById(R.id.goBack);
         logout = findViewById(R.id.logOut);
+
+        //Initialize the local database to get the JwebToken
+        db = AppDatabase.getInstance(AccountDetails.this);
+        jwebTokenDao = db.jwebTokenDao();
+        jwebToken = jwebTokenDao.getAll().get(0);
 
         //Get the account and user sent in the intent
         account = (BankingAccount) getIntent().getSerializableExtra("account");
@@ -114,8 +138,36 @@ public class AccountDetails extends AppCompatActivity {
                 }
             };
 
+    public void refreshAccount(){
+        Apis apis = new Apis();
+        UserApi userApi = apis.getUser();
+        Call<BankingAccount> bankingAccountCall = userApi.getBankingAccount(jwebToken.getJsonWebToken(), account.getIdAccount());
+        bankingAccountCall.enqueue(new Callback<BankingAccount>() {
+            @Override
+            public void onResponse(Call<BankingAccount> call, Response<BankingAccount> response) {
+                if(response.isSuccessful()){
+                    account = response.body();
+                    Toast.makeText(getApplicationContext(), "Account Updated", Toast.LENGTH_LONG).show();
+                }else if(response.code()==401){
+                    Toast.makeText(getApplicationContext(), "Your session has expired, do login again", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<BankingAccount> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Ups, Check your internet conection or IP server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
     @Override
     public void onBackPressed() {
             super.onBackPressed();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        refreshAccount();
     }
 }

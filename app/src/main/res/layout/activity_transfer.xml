@@ -33,10 +33,11 @@
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:fontFamily="@font/abel"
-            android:gravity="center"
+            android:paddingTop="30dp"
+            android:paddingStart="10dp"
             android:text="@string/trans"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -64,6 +65,8 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:ems="10"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bginputtask"
             android:inputType="numberDecimal" />
@@ -81,6 +84,8 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:ems="10"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:background="@drawable/bginputtask"
             android:inputType="numberDecimal"
             android:layout_marginTop="10dp"/>
