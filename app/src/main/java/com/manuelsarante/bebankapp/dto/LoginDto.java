@@ -1,5 +1,9 @@
 package com.manuelsarante.bebankapp.dto;
 
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class LoginDto {
 
     private String user;

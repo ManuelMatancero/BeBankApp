@@ -9,7 +9,10 @@ import androidx.room.Query;
 import com.manuelsarante.bebankapp.room.models.JwebToken;
 
 import java.util.List;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 @Dao
 public interface JwebTokenDao {
     @Query("SELECT * FROM JwebToken")

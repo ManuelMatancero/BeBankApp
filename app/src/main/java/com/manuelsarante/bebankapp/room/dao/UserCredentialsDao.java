@@ -9,7 +9,10 @@ import com.manuelsarante.bebankapp.models.User;
 import com.manuelsarante.bebankapp.room.models.UserCredentials;
 
 import java.util.List;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 @Dao
 public interface UserCredentialsDao {
 

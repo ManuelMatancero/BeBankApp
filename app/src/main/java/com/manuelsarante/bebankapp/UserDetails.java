@@ -8,7 +8,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.manuelsarante.bebankapp.models.User;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class UserDetails extends AppCompatActivity {
 
     TextView fName, email;

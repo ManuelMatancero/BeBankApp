@@ -10,7 +10,10 @@ import com.manuelsarante.bebankapp.room.models.IpAddress;
 
 
 import java.util.List;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 @Dao
 public interface IpAddressDao {
 

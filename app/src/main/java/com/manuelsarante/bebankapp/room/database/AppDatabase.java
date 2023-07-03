@@ -13,7 +13,10 @@ import com.manuelsarante.bebankapp.room.models.IpAddress;
 
 import com.manuelsarante.bebankapp.room.models.JwebToken;
 import com.manuelsarante.bebankapp.room.models.UserCredentials;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 @Database(entities = {UserCredentials.class, IpAddress.class, JwebToken.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 

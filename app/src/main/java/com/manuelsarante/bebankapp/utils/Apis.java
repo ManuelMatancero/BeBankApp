@@ -4,7 +4,10 @@ import com.manuelsarante.bebankapp.Login;
 import com.manuelsarante.bebankapp.api.UserApi;
 import com.manuelsarante.bebankapp.room.dao.IpAddressDao;
 import com.manuelsarante.bebankapp.room.database.AppDatabase;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class Apis {
 
     public AppDatabase db = AppDatabase.getInstance(Login.loginActivity);

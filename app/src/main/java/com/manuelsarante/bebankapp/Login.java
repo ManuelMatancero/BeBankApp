@@ -39,8 +39,10 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class Login extends AppCompatActivity{
     String token;
     private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 7200L;

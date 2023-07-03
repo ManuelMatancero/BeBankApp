@@ -24,7 +24,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class Register extends AppCompatActivity {
 
     EditText txtFullName, email, txtUser, password, cPassword, pin, cPin;

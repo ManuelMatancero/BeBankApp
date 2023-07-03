@@ -1,5 +1,8 @@
 package com.manuelsarante.bebankapp.dto;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class TransactionDto {
 
     //Account you will be sending or reciving the money from

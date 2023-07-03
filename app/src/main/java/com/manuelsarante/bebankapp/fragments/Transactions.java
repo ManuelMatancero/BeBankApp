@@ -36,6 +36,10 @@ import java.util.Locale;
  * Use the {@link Transactions#newInstance} factory method to
  * create an instance of this fragment.
  */
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class Transactions extends Fragment {
 
     //Variables
@@ -135,6 +139,8 @@ public class Transactions extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), Transfer.class);
                 i.putExtra("transferFrom", String.valueOf(bankingAccount.getAccountNumber()));
+                //here i send the ammount of the actual account
+                i.putExtra("actualAmount", bankingAccount.getMountAccount());
                 startActivity(i);
                 AccountDetails.accDetails.finish();
             }

@@ -4,7 +4,10 @@ package com.manuelsarante.bebankapp.room.models;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 @Entity
 public class IpAddress {
 

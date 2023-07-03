@@ -24,7 +24,10 @@ import com.manuelsarante.bebankapp.utils.Apis;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class Transfer extends AppCompatActivity {
 
     EditText edtAccountToTransfer, edtAmountToTransfer;
@@ -58,6 +61,8 @@ public class Transfer extends AppCompatActivity {
 
         //Getting transfer from account, from previous activity
         String transferFrom = getIntent().getStringExtra("transferFrom");
+        //Getting ammount from account
+        double actualAmount = getIntent().getDoubleExtra("actualAmount", 0);
         //Setting transfer from in a textview
         txvTrasnferFrom.setText("Transfer from "+transferFrom);
 
@@ -73,8 +78,9 @@ public class Transfer extends AppCompatActivity {
                     }
                 }else if(edtAccountToTransfer.getText().toString().equals(transferFrom)){
                     edtAccountToTransfer.setError("Can not send money within the same bank account");
-                }
-                else{
+                } else if (Double.parseDouble(edtAmountToTransfer.getText().toString()) > actualAmount) {
+                    edtAmountToTransfer.setError("This account do not have enough money");
+                } else{
                     progressBar.setVisibility(View.VISIBLE);
                     TransactionDto transactionDto = new TransactionDto();
                     transactionDto.setActualAccount(transferFrom);

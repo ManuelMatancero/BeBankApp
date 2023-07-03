@@ -56,6 +56,10 @@ import retrofit2.Response;
  * Use the {@link Details#newInstance} factory method to
  * create an instance of this fragment.
  */
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class Details extends Fragment {
 
 

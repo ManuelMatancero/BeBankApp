@@ -1,7 +1,5 @@
 package com.manuelsarante.bebankapp;
 
-
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -34,7 +32,10 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+/*
+ * Copyright (c) Manuel Antonio Sarante Sanchez 2023
+ * All rights reserved.
+ */
 public class MainActivity extends AppCompatActivity{
     public static User user;
     public static Long idUser;
