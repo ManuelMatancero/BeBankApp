@@ -159,7 +159,6 @@ public class Register extends AppCompatActivity {
             @Override
             public void onFailure(Call<Messages> call, Throwable t) {
                 Log.e("Error:",t.getMessage());
-                email.setText(t.getMessage());
                 Toast.makeText(getApplicationContext(),"Check internet connection or check the URL", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
             }
