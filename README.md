@@ -1,3 +1,6 @@
+# What is this?
+This is an android App that simulates the main logic bussines of a bank
+
 # How to use
 First, to use the app you should have previously set it up an API you can find here: https://github.com/ManuelMatancero/APIBeBank.git.
 
